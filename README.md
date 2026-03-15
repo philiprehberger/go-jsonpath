@@ -1,0 +1,66 @@
+# go-jsonpath
+
+JSONPath query and extraction for Go. Type-safe with generics, zero dependencies.
+
+## Installation
+
+```bash
+go get github.com/philiprehberger/go-jsonpath
+```
+
+## Usage
+
+### Extract Values
+
+```go
+import "github.com/philiprehberger/go-jsonpath"
+
+data := []byte(`{"user": {"name": "Alice", "age": 30}}`)
+
+name, err := jsonpath.Get[string](data, "$.user.name")
+// name = "Alice"
+
+age, err := jsonpath.Get[float64](data, "$.user.age")
+// age = 30
+```
+
+### Wildcards
+
+```go
+data := []byte(`{"users": [{"name": "Alice"}, {"name": "Bob"}]}`)
+
+names, err := jsonpath.GetAll[string](data, "$.users[*].name")
+// names = ["Alice", "Bob"]
+```
+
+### Set Values
+
+```go
+data := []byte(`{"name": "Alice"}`)
+
+updated, err := jsonpath.Set(data, "$.name", "Bob")
+// updated = {"name": "Bob"}
+```
+
+### Supported Syntax
+
+| Syntax | Description |
+|--------|-------------|
+| `$` | Root object |
+| `$.field` | Object field |
+| `$.a.b.c` | Nested fields |
+| `$[0]` | Array index |
+| `$.items[*]` | Wildcard (all elements) |
+
+## API
+
+| Function | Description |
+|----------|-------------|
+| `Get[T](data, path)` | Extract single value as type T |
+| `GetRaw(data, path)` | Extract value without type conversion |
+| `GetAll[T](data, path)` | Extract all wildcard matches as type T |
+| `Set(data, path, value)` | Set value at path, return modified JSON |
+
+## License
+
+MIT

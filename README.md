@@ -65,6 +65,13 @@ updated, err := jsonpath.Set(data, "$.name", "Bob")
 | `GetAll[T](data, path)` | Extract all wildcard matches as type T |
 | `Set(data, path, value)` | Set value at path, return modified JSON |
 
+## Development
+
+```bash
+go test ./...
+go vet ./...
+```
+
 ## License
 
 MIT

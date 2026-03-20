@@ -46,6 +46,23 @@ updated, err := jsonpath.Set(data, "$.name", "Bob")
 // updated = {"name": "Bob"}
 ```
 
+### Exists
+
+```go
+import jsonpath "github.com/philiprehberger/go-jsonpath"
+
+exists, _ := jsonpath.Exists(data, "$.address.city")
+// true
+```
+
+### Delete
+
+```go
+import jsonpath "github.com/philiprehberger/go-jsonpath"
+
+result, _ := jsonpath.Delete(data, "$.temporary")
+```
+
 ### Supported Syntax
 
 | Syntax | Description |
@@ -64,6 +81,8 @@ updated, err := jsonpath.Set(data, "$.name", "Bob")
 | `GetRaw(data, path)` | Extract value without type conversion |
 | `GetAll[T](data, path)` | Extract all wildcard matches as type T |
 | `Set(data, path, value)` | Set value at path, return modified JSON |
+| `Exists(data, path)` | Check whether a path exists |
+| `Delete(data, path)` | Remove value at path, return modified JSON |
 
 ## Development
 

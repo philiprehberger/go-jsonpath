@@ -6,6 +6,7 @@ package jsonpath
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 // Get extracts a single value at the given JSONPath and unmarshals it to type T.
@@ -91,6 +92,65 @@ func Set(data []byte, path string, value any) ([]byte, error) {
 	}
 
 	return json.Marshal(root)
+}
+
+// Exists checks whether a path exists in the JSON data.
+func Exists(data []byte, path string) (bool, error) {
+	_, err := GetRaw(data, path)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") || strings.Contains(err.Error(), "out of bounds") {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
+// Delete removes the value at the given path from the JSON data.
+func Delete(data []byte, path string) ([]byte, error) {
+	tokens, err := parse(path)
+	if err != nil {
+		return nil, err
+	}
+	if len(tokens) == 0 {
+		return nil, fmt.Errorf("jsonpath: cannot delete root")
+	}
+
+	var root any
+	if err := json.Unmarshal(data, &root); err != nil {
+		return nil, fmt.Errorf("jsonpath: invalid JSON: %w", err)
+	}
+
+	if err := deleteValue(root, tokens, path); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(root)
+}
+
+func deleteValue(data any, tokens []token, fullPath string) error {
+	if len(tokens) == 1 {
+		tok := tokens[0]
+		switch tok.kind {
+		case tokenField:
+			m, ok := data.(map[string]any)
+			if !ok {
+				return fmt.Errorf("jsonpath: expected object at %q", fullPath)
+			}
+			delete(m, tok.field)
+			return nil
+		case tokenIndex:
+			return fmt.Errorf("jsonpath: cannot delete array elements")
+		default:
+			return fmt.Errorf("jsonpath: cannot delete with wildcard")
+		}
+	}
+
+	child, err := traverse(data, tokens[:1], fullPath)
+	if err != nil {
+		return err
+	}
+	return deleteValue(child, tokens[1:], fullPath)
 }
 
 // traverse walks the data structure according to the token path and returns

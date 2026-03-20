@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+- Add `Exists` function for path existence checking
+- Add `Delete` function for removing values by path
+- Expand README with new examples
+
 ## 0.1.2
 
 - Add Development section to README

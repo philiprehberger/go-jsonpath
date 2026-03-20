@@ -137,3 +137,53 @@ func TestGet_InvalidPath(t *testing.T) {
 		t.Fatal("expected error for invalid path, got nil")
 	}
 }
+
+func TestExists(t *testing.T) {
+	data := []byte(`{"name":"Alice","address":{"city":"NYC"}}`)
+
+	ok, err := Exists(data, "$.name")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ok {
+		t.Error("expected name to exist")
+	}
+
+	ok, err = Exists(data, "$.missing")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ok {
+		t.Error("expected missing to not exist")
+	}
+
+	ok, err = Exists(data, "$.address.city")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ok {
+		t.Error("expected address.city to exist")
+	}
+}
+
+func TestDelete(t *testing.T) {
+	data := []byte(`{"name":"Alice","age":30}`)
+
+	result, err := Delete(data, "$.age")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = Get[int](result, "$.age")
+	if err == nil {
+		t.Error("expected age to be deleted")
+	}
+
+	name, err := Get[string](result, "$.name")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if name != "Alice" {
+		t.Errorf("expected Alice, got %s", name)
+	}
+}

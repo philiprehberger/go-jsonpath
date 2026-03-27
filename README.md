@@ -1,6 +1,6 @@
 # go-jsonpath
 
-[![CI](https://github.com/philiprehberger/go-jsonpath/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/go-jsonpath/actions/workflows/ci.yml) [![Go Reference](https://pkg.go.dev/badge/github.com/philiprehberger/go-jsonpath.svg)](https://pkg.go.dev/github.com/philiprehberger/go-jsonpath) [![License](https://img.shields.io/github/license/philiprehberger/go-jsonpath)](LICENSE)
+[![CI](https://github.com/philiprehberger/go-jsonpath/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/go-jsonpath/actions/workflows/ci.yml) [![Go Reference](https://pkg.go.dev/badge/github.com/philiprehberger/go-jsonpath.svg)](https://pkg.go.dev/github.com/philiprehberger/go-jsonpath) [![License](https://img.shields.io/github/license/philiprehberger/go-jsonpath)](LICENSE) [![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 JSONPath query and extraction for Go. Type-safe with generics, zero dependencies
 
